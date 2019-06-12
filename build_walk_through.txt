@@ -1,0 +1,49 @@
+#For setting up vagrant on mac, see singularity instructions
+https://www.sylabs.io/guides/3.2/user-guide/installation.html#install-on-windows-or-mac
+
+##TO BUILD VAGRANT VM## ----------------------------------------------
+
+brew cask install virtualbox && \
+    brew cask install vagrant && \
+    brew cask install vagrant-manager
+    
+mkdir vm-singularity && \
+    cd vm-singularity
+
+vagrant destroy && \
+    rm Vagrantfile
+    
+export VM=sylabs/singularity-3.2-ubuntu-bionic64 && \
+    vagrant init $VM && \
+    vagrant up && \
+    vagrant ssh
+
+#This created this directory to contain the vm
+~/Documents/vm-singularity
+
+# I Added this to the vagrant file within the config section 
+# so that I can access the build_spec document
+
+Vagrant.configure("2") do |config|
+  # ... other configuration
+  
+  config.vm.provision "file", source: "~/Documents/projects/monogenic/singularity", destination: "$HOME/remote/singularity"
+end
+
+##RUN THE FOLLOWING FOR RUNNING THE VAGRANT VM ## ----------------------------
+#This is the only command that needs to be done to start the vagrant session
+#the provision flag makes sure that file provisioning is done
+
+cd vm-singularity
+vagrant up --provision && vagrant ssh 
+
+##To end
+exit
+
+## To stop VM
+vagrant halt
+
+##RUN THE FOLLOWING TO CREATE THE CONTAINER ## ----------------------------
+sudo singularity build monogenic.sif singularity_build.def
+
+

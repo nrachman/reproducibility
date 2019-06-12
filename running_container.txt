@@ -1,0 +1,12 @@
+#Running the container instance
+# see https://www.sylabs.io/guides/3.2/user-guide/running_services.html
+
+#To start 
+singularity instance start   monogenic.sif     instance1
+
+
+#To start an interactive rsession
+singularity run instance://instance1 R
+
+#To run an R script
+singularity run instance://instance1 Rscript <your_script.R>
